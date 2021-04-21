@@ -17,7 +17,7 @@
 {% if election.private_p %}
 <em>Your election is marked private, which means you cannot open registration up more widely</em>.<br />
 {% else %}
-You can change this setting:
+<!-- You can change this setting:
 <form method="post" action="{% url "election@voters@eligibility" election.uuid %}">
 <input type="hidden" name="csrf_token" value="{{csrf_token}}" />
 <input type="radio" name="eligibility" value="openreg" {% if election.openreg and not election.eligibility %}CHECKED{% endif %} /> anyone can vote<br />
@@ -32,13 +32,19 @@ You can change this setting:
 <br />
 {% endif %}
 <input type="submit" value="update" />
+</form> -->
+<br /><em>Private elections are disabled. Your election is open to the public.</em>.<br />
+<form method="post" action="{% url "election@voters@eligibility" election.uuid %}">
+  <input type="hidden" name="csrf_token" value="{{csrf_token}}" />
+  <input type="radio" name="eligibility" value="openreg" {% if election.openreg and not election.eligibility %}CHECKED{% endif %} /> anyone can vote<br />
+  <input type="submit" value="update" />
 </form>
 {% endif %}
 {% endif %}
 
-{% if email_voters and election.frozen_at and admin_p %}
+<!-- {% if email_voters and election.frozen_at and admin_p %}
 <p><a class="button" href="{% url "election@voters@email" election.uuid %}">email voters</a></p>
-{% endif %}
+{% endif %} -->
 
 {% if election.num_voters > 20 %}
 <p>
@@ -50,8 +56,7 @@ You can change this setting:
 </p>
 {% endif %}
 
-{% if admin_p %}
-<!-- Add a Voter: WORK HERE-->
+<!-- {% if admin_p %}
 {% if upload_p and not election.openreg %}
 <p>
 <a class="button" href="{% url "election@voters@upload" election_uuid=election.uuid %}">bulk upload voters</a>
@@ -84,7 +89,7 @@ Prior Bulk Uploads:
 </ul>
 {% endif %}
 {% endif %}
-{% endif %}
+{% endif %} -->
 
 {% if voters %}
 
@@ -143,7 +148,11 @@ Voters {{voters_page.start_index}} - {{voters_page.end_index}} (of {{total_voter
 {% if election.use_voter_aliases %}
 <td>{{voter.alias}}</td>
 {% endif %}
+{% if election.restrict_verif %}
+<td>The Smart Ballot Tracker is available only to the voters</td>
+{% else %}
 <td><tt style="font-size: 1.4em;">{% if voter.vote_hash %}{{voter.vote_hash}} <span style="font-size:0.8em;">[<a href="{% url "shortcut@vote" vote_tinyhash=voter.vote_tinyhash %}">view</a>]</span>{% else %}&mdash;{% endif %}</tt></td>
+{% endif %}
 </tr>
 {% endfor %}
 </table>

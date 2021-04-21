@@ -218,6 +218,9 @@ def one_election_edit(request, election):
   error = None
   RELEVANT_FIELDS = ['short_name', 'name', 'description', 'use_voter_aliases', 'election_type', 'private_p', 'help_email', 'randomize_answer_order', 'voting_starts_at', 'voting_ends_at']
   # RELEVANT_FIELDS += ['use_advanced_audit_features']
+  RELEVANT_FIELDS += ['disable_verif']
+  RELEVANT_FIELDS += ['restrict_verif']
+  RELEVANT_FIELDS += ['delayed_verif']
 
   if settings.ALLOW_ELECTION_INFO_URL:
     RELEVANT_FIELDS += ['election_info_url']
@@ -964,6 +967,9 @@ def one_election_copy(request, election):
     use_voter_aliases = election.use_voter_aliases,
     use_advanced_audit_features = election.use_advanced_audit_features,
     randomize_answer_order = election.randomize_answer_order,
+    disable_verif = election.disable_verif,
+    restrict_verif = election.restrict_verif,
+    delayed_verif = election.delayed_verif,
     registration_starts_at = election.registration_starts_at,
     voting_starts_at = election.voting_starts_at,
     voting_ends_at = election.voting_ends_at,
@@ -1242,6 +1248,7 @@ def voters_eligibility(request, election):
 
   # eligibility
   eligibility = request.POST['eligibility']
+  # print(eligibility)
 
   if eligibility in ['openreg', 'limitedreg']:
     election.openreg= True

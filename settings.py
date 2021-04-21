@@ -88,7 +88,7 @@ SECRET_KEY = get_from_env('SECRET_KEY', 'replaceme')
 #More info: https://docs.djangoproject.com/en/1.7/ref/settings/#allowed-hosts (same for 1.6)
 
 ALLOWED_HOSTS = get_from_env('ALLOWED_HOSTS', 'localhost').split(",")
-
+ALLOWED_HOSTS.append('127.0.0.1')
 # Secure Stuff
 if get_from_env('SSL', '0') == '1':
     SECURE_SSL_REDIRECT = True
@@ -215,8 +215,8 @@ AUTH_ENABLED_SYSTEMS = get_from_env('AUTH_ENABLED_SYSTEMS',
 AUTH_DEFAULT_SYSTEM = get_from_env('AUTH_DEFAULT_SYSTEM', get_from_env('AUTH_DEFAULT_AUTH_SYSTEM', None))
 
 # google
-GOOGLE_CLIENT_ID = get_from_env('GOOGLE_CLIENT_ID', '')
-GOOGLE_CLIENT_SECRET = get_from_env('GOOGLE_CLIENT_SECRET', '')
+GOOGLE_CLIENT_ID = '484979500056-6cdgh45ks48o87biir4joc81ep3fbu1g.apps.googleusercontent.com' #get_from_env('GOOGLE_CLIENT_ID', '')
+GOOGLE_CLIENT_SECRET = '8gGjRTTIpj0T11qR9EC8zi2A' #get_from_env('GOOGLE_CLIENT_SECRET', '')
 
 # facebook
 FACEBOOK_APP_ID = get_from_env('FACEBOOK_APP_ID','')

@@ -11,6 +11,9 @@ from .widgets import SplitSelectDateTimeWidget
 
 
 class ElectionForm(forms.Form):
+  disable_verif = forms.BooleanField(required=False, initial=False, label="Disable verifiability", help_text='If selected, votes cannot be verified. This protects againat attacks revealing votes at the cost of removing true-verifiability.')
+  restrict_verif = forms.BooleanField(required=False, initial=False, label="Restrict verifiability", help_text='If selected, votes can only be verified by voters. This protects againat attacks revealing votes at the cost of removing universal-verifiability.')
+  delayed_verif = forms.BooleanField(required=False, initial=False, label="Delay verifiability", help_text='If selected, votes can only be verified after the election is closed. This protects againat attacks revealing votes, at the cost of removing true-verifiability., but only in the election process.')
   short_name = forms.SlugField(max_length=40, help_text='no spaces, will be part of the URL for your election, e.g. my-club-2010')
   name = forms.CharField(max_length=100, widget=forms.TextInput(attrs={'size':60}), help_text='the pretty name for your election, e.g. My Club 2010 Election')
   description = forms.CharField(max_length=4000, widget=forms.Textarea(attrs={'cols': 70, 'wrap': 'soft'}), required=False)
@@ -18,7 +21,8 @@ class ElectionForm(forms.Form):
   use_voter_aliases = forms.BooleanField(required=False, initial=False, help_text='If selected, voter identities will be replaced with aliases, e.g. "V12", in the ballot tracking center')
   #use_advanced_audit_features = forms.BooleanField(required=False, initial=True, help_text='disable this only if you want a simple election with reduced security but a simpler user interface')
   randomize_answer_order = forms.BooleanField(required=False, initial=False, help_text='enable this if you want the answers to questions to appear in random order for each voter')
-  private_p = forms.BooleanField(required=False, initial=False, label="Private?", help_text='A private election is only visible to registered voters.')
+  private_p = forms.BooleanField(required=False, initial=False, label="Private?", help_text='For security reasons, the private election feature is diabled.', disabled=True)
+  # private_p = forms.BooleanField(required=False, initial=False, label="Private?", help_text='A private election is only visible to registered voters.')
   help_email = forms.CharField(required=False, initial="", label="Help Email Address", help_text='An email address voters should contact if they need help.')
   
   if settings.ALLOW_ELECTION_INFO_URL:
