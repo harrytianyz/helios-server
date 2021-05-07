@@ -148,10 +148,46 @@ Voters {{voters_page.start_index}} - {{voters_page.end_index}} (of {{total_voter
 {% if election.use_voter_aliases %}
 <td>{{voter.alias}}</td>
 {% endif %}
-{% if election.restrict_verif %}
-<td>The Smart Ballot Tracker is available only to the voters</td>
-{% else %}
+
+<!-- MODULARITY FEATURES -->
+<!-- when election is open -->
+{% if not election.voting_has_stopped %}
+{% if admin_p %}
+<!-- admin_perm_open -->
+{% if election.admin_perm_open %}
 <td><tt style="font-size: 1.4em;">{% if voter.vote_hash %}{{voter.vote_hash}} <span style="font-size:0.8em;">[<a href="{% url "shortcut@vote" vote_tinyhash=voter.vote_tinyhash %}">view</a>]</span>{% else %}&mdash;{% endif %}</tt></td>
+{% else %}
+<td>The Smart Ballot Tracker is disabled to administrators.</td>
+{% endif %}
+{% else %}
+<!-- audit_perm_open -->
+{% if election.audit_perm_open == "themselves" %}
+<td>The Smart Ballot Tracker is available only to the voters. Voters can verify their vote from their email.</td>
+{% elif election.audit_perm_open == "nobody" %}
+<td>The Smart Ballot Tracker is disabled.</td>
+{% elif election.audit_perm_open == "anyone" %}
+<td><tt style="font-size: 1.4em;">{% if voter.vote_hash %}{{voter.vote_hash}} <span style="font-size:0.8em;">[<a href="{% url "shortcut@vote" vote_tinyhash=voter.vote_tinyhash %}">view</a>]</span>{% else %}&mdash;{% endif %}</tt></td>
+{% endif %}
+{% endif %}
+<!-- when election is closed -->
+{% else %}
+{% if admin_p %}
+<!-- admin_perm_close -->
+{% if election.admin_perm_close %}
+<td><tt style="font-size: 1.4em;">{% if voter.vote_hash %}{{voter.vote_hash}} <span style="font-size:0.8em;">[<a href="{% url "shortcut@vote" vote_tinyhash=voter.vote_tinyhash %}">view</a>]</span>{% else %}&mdash;{% endif %}</tt></td>
+{% else %}
+<td>The Smart Ballot Tracker is disabled to administrators.</td>
+{% endif %}
+{% else %}
+<!-- audit_perm_close -->
+{% if election.audit_perm_close == "themselves" %}
+<td>The Smart Ballot Tracker is available only to the voters.  Voters can verify their vote from their email.</td>
+{% elif election.audit_perm_close == "nobody" %}
+<td>The Smart Ballot Tracker is disabled.</td>
+{% elif election.audit_perm_close == "anyone" %}
+<td><tt style="font-size: 1.4em;">{% if voter.vote_hash %}{{voter.vote_hash}} <span style="font-size:0.8em;">[<a href="{% url "shortcut@vote" vote_tinyhash=voter.vote_tinyhash %}">view</a>]</span>{% else %}&mdash;{% endif %}</tt></td>
+{% endif %}
+{% endif %}
 {% endif %}
 </tr>
 {% endfor %}

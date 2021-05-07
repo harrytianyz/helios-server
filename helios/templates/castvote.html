@@ -13,18 +13,63 @@ by <b><u>
 {% endif %}
 </u></b>
 <br /><br />
-{% if election.disable_verif %}
-<p>The verifiability feature is disabled.</p>
-{% if election.delayed_verif and not election.voting_has_stopped %}
-<p>The verifiability feature is currently disabled. You can verify votes after the election closes.</p>
-{% else %}
+
+<!-- when election is open -->
+{% if not election.voting_has_stopped %}
+{% if admin_p %}
+<!-- admin_perm_open -->
+{% if election.admin_perm_open %}
 <a href="#" onclick="$('#castvote_content').slideToggle(250); return false;">details</a><br /><br />
 <div style="display:none;" id="castvote_content">
 <textarea cols="100" rows="10">
 {{vote_content}}
 </textarea>
 </div>
+{% else %}
+<p>The verifiability feature is disabled to administrators.</p>
 {% endif %}
+{% else %}
+<!-- audit_perm_open -->
+{% if election.audit_perm_open == "themselves" or election.audit_perm_open == "anyone" %}
+<a href="#" onclick="$('#castvote_content').slideToggle(250); return false;">details</a><br /><br />
+<div style="display:none;" id="castvote_content">
+<textarea cols="100" rows="10">
+{{vote_content}}
+</textarea>
+</div>
+{% elif election.audit_perm_open == "nobody" %}
+<p>The verifiability feature is disabled.</p>
+{% endif %}
+{% endif %}
+<!-- when election is closed -->
+{% else }
+{% if admin_p %}
+<!-- admin_perm_close -->
+{% if election.admin_perm_close %}
+<a href="#" onclick="$('#castvote_content').slideToggle(250); return false;">details</a><br /><br />
+<div style="display:none;" id="castvote_content">
+<textarea cols="100" rows="10">
+{{vote_content}}
+</textarea>
+</div>
+{% else %}
+<p>The verifiability feature is disabled to administrators.</p>
+{% endif %}
+{% else %}
+<!-- audit_perm_close -->
+{% if election.audit_perm_close == "themselves" or election.audit_perm_close == "anyone" %}
+<a href="#" onclick="$('#castvote_content').slideToggle(250); return false;">details</a><br /><br />
+<div style="display:none;" id="castvote_content">
+<textarea cols="100" rows="10">
+{{vote_content}}
+</textarea>
+</div>
+{% elif election.audit_perm_close == "nobody" %}
+<p>The verifiability feature is disabled.</p>
+{% endif %}
+{% endif %}
+{% endif %}
+
 <br /><br />
 
 

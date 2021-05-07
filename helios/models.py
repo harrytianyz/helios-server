@@ -87,9 +87,10 @@ class Election(HeliosModel):
   randomize_answer_order = models.BooleanField(default=False, null=False)
   
   # modularity fields
-  disable_verif = models.BooleanField(default=False, null=False)
-  restrict_verif = models.BooleanField(default=False, null=False)
-  delayed_verif = models.BooleanField(default=False, null=False)
+  audit_perm_open = models.CharField(default='nobody', max_length=300, null=False)
+  audit_perm_close = models.CharField(default='anyone', max_length=300, null=False)
+  admin_perm_open = models.BooleanField(default=False, null=False)
+  admin_perm_close = models.BooleanField(default=True, null=False)
 
   # where votes should be cast
   cast_url = models.CharField(max_length = 500)
@@ -160,9 +161,10 @@ class Election(HeliosModel):
       'private_p': self.private_p,
       'use_advanced_audit_features': self.use_advanced_audit_features,
       'randomize_answer_order': self.randomize_answer_order,
-      'disable_verif': self.disable_verif,
-      'restrict_verif': self.restrict_verif,
-      'delayed_verif': self.delayed_verif
+      'audit_perm_open':  self.audit_perm_open,
+      'audit_perm_close': self.audit_perm_close,
+      'admin_perm_open': self.admin_perm_open,
+      'admin_perm_close': self.admin_perm_close
       }
 
   @property
