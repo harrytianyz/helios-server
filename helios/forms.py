@@ -14,20 +14,6 @@ class ElectionForm(forms.Form):
   short_name = forms.SlugField(max_length=40, help_text='no spaces, will be part of the URL for your election, e.g. my-club-2010')
   name = forms.CharField(max_length=100, widget=forms.TextInput(attrs={'size':60}), help_text='the pretty name for your election, e.g. My Club 2010 Election') 
   
-  #### MODULARITY FEATURES ####
-  modularity_text = forms.BooleanField(required=False, initial="", disabled=True,  widget=forms.RadioSelect(), label="Modularity options", help_text='Modularity features.')
-  audit_perm_choices =  (
-    ('anyone', 'Anyone'),
-    ('themselves', 'Themselves'),
-    ('nobody', 'Nobody')
-    )
-  audit_perm_open = forms.ChoiceField(initial='nobody', label="audit_perm_open", choices = audit_perm_choices)
-  audit_perm_close = forms.ChoiceField(initial='anyone', label="audit_perm_close", choices = audit_perm_choices)
-  admin_perm_open = forms.BooleanField(required=False, initial=False, label="admin_perm_open")
-  admin_perm_close = forms.BooleanField(required=False, initial=True, label="admin_perm_close", widget=forms.HiddenInput())
-  # if delayed_verif.has_changed():
-  #   s = forms.BooleanField(required=False, initial=False, label="lollllllll")
-
   description = forms.CharField(max_length=4000, widget=forms.Textarea(attrs={'cols': 70, 'wrap': 'soft'}), required=False)
   election_type = forms.ChoiceField(label="type", choices = Election.ELECTION_TYPES)
   use_voter_aliases = forms.BooleanField(required=False, initial=False, help_text='If selected, voter identities will be replaced with aliases, e.g. "V12", in the ballot tracking center')
@@ -49,10 +35,26 @@ class ElectionForm(forms.Form):
   voting_ends_at = SplitDateTimeField(help_text = 'UTC date and time when voting ends',
                                    widget=SplitSelectDateTimeWidget, required=False)
 
-  def __init__(self, *args, **kwargs):
-      super(ElectionForm, self).__init__(*args, **kwargs)
+  #### MODULARITY FEATURES ####
+  modularity_text = forms.BooleanField(required=False, initial="", disabled=True, widget=forms.RadioSelect(), label="Verifiabiilty options", 
+  help_text= '''You can customize election verifiability by:\n restricting the votes that can be audited by non-adminstrators and whether administrators can audit. 
+  These options can be set separately for when the election is open and closed.
+  The default options are set to prevent attacks towards ballot secrecy''')
+  audit_perm_choices =  (
+    ('anyone', 'Anyone'),
+    ('themselves', 'Themselves'),
+    ('nobody', 'Nobody')
+    )
+  audit_perm_open = forms.ChoiceField(initial='nobody', label="Audit restriction when open", choices = audit_perm_choices, help_text='When the election is open, whose votes can be audited?')
+  audit_perm_close = forms.ChoiceField(initial='anyone', label="Audit restriction when closed", choices = audit_perm_choices, help_text='When the election is closed, whose votes can be audited?')
+  admin_perm_open = forms.BooleanField(required=False, initial=False, label="Admin permission when open", help_text='When the election is open, can administrators audit?')
+  admin_perm_close = forms.BooleanField(required=False, initial=True, label="Admin permission when closed", help_text='When the election is closed, can administrators audit?') #widget=forms.HiddenInput()
+  # if admin_perm_close.has_changed():
 
-      self.fields['admin_perm_close'] = forms.BooleanField(required=False, initial=True, label="admin_perm_close")
+  # this overrides any of the above code
+  # def __init__(self, *args, **kwargs):
+  #     super(ElectionForm, self).__init__(*args, **kwargs)
+  #     self.fields['admin_perm_close'] = forms.BooleanField(required=False, initial=True, label="admin_perm_close")
 
 class ElectionTimeExtensionForm(forms.Form):
   voting_extended_until = SplitDateTimeField(help_text = 'UTC date and time voting extended to',
