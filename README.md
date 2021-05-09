@@ -1,7 +1,11 @@
-# Helios Election System
+# Carleton Helios
 
-Helios is an end-to-end verifiable voting system.
+This is part of the Voting machine comps of the 2020-21 Carleton CS comps. 
 
-[![Travis Build Status](https://travis-ci.org/benadida/helios-server.svg?branch=master)](https://travis-ci.org/benadida/helios-server)
+Advisor: Sneha Narayan 
 
-[![Stories in Ready](https://badge.waffle.io/benadida/helios-server.png?label=ready&title=Ready)](https://waffle.io/benadida/helios-server)
+Members: Harry, James, John, Judy, Kate, Matthew
+
+### Helios
+
+This project is based off of [Helios Voting](https://vote.heliosvoting.org/), a web-based open-audit electronic voting system. In our implementation, we added modular security features that offer customization in the degree of the election's security and integrity.
